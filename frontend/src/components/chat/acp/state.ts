@@ -4,6 +4,8 @@ import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { capitalize } from "lodash-es";
 import { isPlatformWindows } from "@/core/hotkeys/shortcuts";
+import { userConfigAtom } from "@/core/config/config";
+import { store } from "@/core/state/jotai";
 import { jotaiJsonStorage } from "@/utils/storage/jotai";
 import type { TypedString } from "@/utils/typed";
 import { generateUUID } from "@/utils/uuid";
@@ -228,6 +230,18 @@ export function getAgentDisplayName(agentId: ExternalAgentId): string {
 }
 
 export function getAgentWebSocketUrl(agentId: ExternalAgentId): string {
+  // Check for user-configured override (for remote deployments)
+  const config = store.get(userConfigAtom);
+  const agentUrl = config.experimental?.agent_url;
+
+  if (agentUrl) {
+    // User provided custom base URL - append /message path
+    // Example: "wss://my-server.fly.dev:3017" -> "wss://my-server.fly.dev:3017/message"
+    const url = agentUrl.endsWith("/") ? agentUrl.slice(0, -1) : agentUrl;
+    return `${url}/message`;
+  }
+
+  // Fall back to default localhost URL
   return AGENT_CONFIG[agentId].webSocketUrl;
 }
 

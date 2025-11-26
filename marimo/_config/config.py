@@ -517,6 +517,8 @@ class ExperimentalConfig(TypedDict, total=False):
     rtc_v2: bool
     performant_table_charts: bool
     chat_modes: bool
+    external_agents: bool
+    agent_url: str  # Override ACP WebSocket URL for remote deployments
 
     # Internal features
     cache: CacheConfig
