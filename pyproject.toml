@@ -318,6 +318,7 @@ marimo_docs = { path = "./docs", editable = true }
 module-name = "marimo"
 module-root = ""
 source-include = ["third_party.txt", "third_party_licenses.txt"]
+data-include = ["marimo/_static/**", "marimo/_lsp/**", "marimo/_tutorials/**"]
 wheel-exclude = ["marimo/_smoke_tests/**"]
 
 [tool.hatch.envs.docs.scripts]
